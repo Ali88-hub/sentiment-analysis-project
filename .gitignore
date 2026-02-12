@@ -1,6 +1,10 @@
 *.env
-<<<<<<< HEAD
-*.sentiment-analysis-env/
-=======
-*sentiment-analysis-env/
->>>>>>> feature/add-training-logic
+# SSH
+.ssh/
+
+# Virtual environments
+sentiment-analysis-env/
+
+# Python cache
+__pycache__/
+*.pyc
