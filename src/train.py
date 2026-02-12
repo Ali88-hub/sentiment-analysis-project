@@ -3,6 +3,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline, make_pipeline
+# New imports
+import os
+from joblib import dump
+
 def load_and_validate_data(data_path: str) -> pd.DataFrame:
     """
     Loads data from a CSV and ensures it has the required columns.
@@ -41,7 +45,16 @@ def train_model(X_train: pd.Series, y_train: pd.Series) -> Pipeline:
     )
     clf_pipeline.fit(X_train, y_train)
     return clf_pipeline
+# New function
+def save_model(model: Pipeline, model_path: str) -> None:
+    """
+    Saves the trained model to a file.
+    """
+    os.makedirs(os.path.dirname(model_path), exist_ok=True)
+    dump(model, model_path)
+    print(f"Saved model to {model_path}")
 
+    
 if __name__ == "__main__":
     df = load_and_validate_data("data/sentiments.csv")
     print(df.head())
