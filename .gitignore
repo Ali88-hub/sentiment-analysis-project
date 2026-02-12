@@ -1,17 +1,25 @@
-*.env
+# Umgebungsvariablen
+.env
+
 # SSH
 .ssh/
 
-# Virtual environments
+# Virtuelle Umgebungen
 sentiment-analysis-env/
 
-# Python cache
+# Python-Cache
 __pycache__/
 *.pyc
+
 # Datasets
 notebooks/*.zip
 *.zip
-
-# Data folders
 data/
 datasets/
+
+# Modelle
+model/
+models/
+
+# Notebooks-Artefakte
+notebooks/
