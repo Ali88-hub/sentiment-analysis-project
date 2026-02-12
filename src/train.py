@@ -6,7 +6,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline, make_pipeline
+
 
 def load_and_validate_data(data_path: str) -> pd.DataFrame:
     """
@@ -59,14 +59,6 @@ def main(data_path: str, model_path: str) -> None:
     print(f"Test accuracy: {acc:.3f}")
 
     save_model(clf, model_path)
-
-def save_model(model: Pipeline, model_path: str) -> None:
-    """
-    Saves the trained model to a file.
-    """
-    os.makedirs(os.path.dirname(model_path), exist_ok=True)
-    dump(model, model_path)
-    print(f"Saved model to {model_path}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

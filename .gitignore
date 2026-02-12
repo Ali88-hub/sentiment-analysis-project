@@ -1,2 +1,6 @@
 *.env
+<<<<<<< HEAD
 *.sentiment-analysis-env/
+=======
+*sentiment-analysis-env/
+>>>>>>> feature/add-training-logic
