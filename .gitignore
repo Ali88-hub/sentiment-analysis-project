@@ -8,3 +8,10 @@ sentiment-analysis-env/
 # Python cache
 __pycache__/
 *.pyc
+# Datasets
+notebooks/*.zip
+*.zip
+
+# Data folders
+data/
+datasets/
