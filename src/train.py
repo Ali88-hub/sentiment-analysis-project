@@ -59,11 +59,15 @@ def split_data(
 
 def print_dataset_summary(df: pd.DataFrame) -> None:
     """
-    Prints a simple summary of the dataset.
+    Print a compact overview of dataset quality and class balance.
+
+    This is intended as a quick pre-training sanity check so users can see
+    whether the dataset has missing values and how labels are distributed.
     """
     total_rows = len(df)
     missing_text = int(df["text"].isna().sum())
     missing_label = int(df["label"].isna().sum())
+    # Keep missing labels visible in the distribution output as well.
     label_counts = df["label"].value_counts(dropna=False).to_dict()
 
     print("Dataset summary:")
