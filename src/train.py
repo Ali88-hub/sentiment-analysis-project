@@ -57,6 +57,21 @@ def split_data(
             ) from exc
     return X_train, X_test, y_train, y_test
 
+def print_dataset_summary(df: pd.DataFrame) -> None:
+    """
+    Prints a simple summary of the dataset.
+    """
+    total_rows = len(df)
+    missing_text = int(df["text"].isna().sum())
+    missing_label = int(df["label"].isna().sum())
+    label_counts = df["label"].value_counts(dropna=False).to_dict()
+
+    print("Dataset summary:")
+    print(f"- Rows: {total_rows}")
+    print(f"- Missing text values: {missing_text}")
+    print(f"- Missing label values: {missing_label}")
+    print(f"- Label distribution: {label_counts}")
+
 def train_model(X_train: pd.Series, y_train: pd.Series) -> Pipeline:
     """
     Builds and trains a classification pipeline.
@@ -79,6 +94,7 @@ def main(data_path: str, model_path: str) -> None:
     """
     try:
         df = load_and_validate_data(data_path)
+        print_dataset_summary(df)
         X_train, X_test, y_train, y_test = split_data(df)
         clf = train_model(X_train, y_train)
 
