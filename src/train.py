@@ -1,5 +1,6 @@
 import argparse
 import os
+import sys
 
 from joblib import dump
 import pandas as pd
@@ -12,9 +13,25 @@ def load_and_validate_data(data_path: str) -> pd.DataFrame:
     """
     Loads data from a CSV and ensures it has the required columns.
     """
-    df = pd.read_csv(data_path)
+    if not os.path.exists(data_path):
+        raise FileNotFoundError(f"Data file not found: {data_path}")
+    try:
+        df = pd.read_csv(data_path)
+    except pd.errors.EmptyDataError as exc:
+        raise ValueError(f"CSV file is empty: {data_path}") from exc
+    except pd.errors.ParserError as exc:
+        raise ValueError(f"CSV file is malformed: {data_path}") from exc
+    except OSError as exc:
+        raise OSError(f"Could not read data file: {data_path}") from exc
+
     if not {"text", "label"}.issubset(df.columns):
         raise ValueError("CSV must contain 'text' and 'label' columns")
+    if df.empty:
+        raise ValueError("CSV contains no rows")
+    if df["text"].isna().all():
+        raise ValueError("'text' column cannot be entirely empty")
+    if df["label"].isna().all():
+        raise ValueError("'label' column cannot be entirely empty")
     return df
 
 def split_data(
@@ -30,9 +47,14 @@ def split_data(
         )
     except ValueError:
         # Fallback if stratification fails (e.g., on very small datasets)
-        X_train, X_test, y_train, y_test = train_test_split(
-            df["text"], df["label"], test_size=0.2, random_state=42
-        )
+        try:
+            X_train, X_test, y_train, y_test = train_test_split(
+                df["text"], df["label"], test_size=0.2, random_state=42
+            )
+        except ValueError as exc:
+            raise ValueError(
+                "Could not split dataset; ensure at least 2 valid rows are present"
+            ) from exc
     return X_train, X_test, y_train, y_test
 
 def train_model(X_train: pd.Series, y_train: pd.Series) -> Pipeline:
@@ -43,29 +65,42 @@ def train_model(X_train: pd.Series, y_train: pd.Series) -> Pipeline:
         TfidfVectorizer(min_df=1, ngram_range=(1, 2)),
         LogisticRegression(max_iter=1000),
     )
-    clf_pipeline.fit(X_train, y_train)
+    try:
+        clf_pipeline.fit(X_train, y_train)
+    except ValueError as exc:
+        raise ValueError(
+            "Model training failed; check that text and label values are valid"
+        ) from exc
     return clf_pipeline
 
 def main(data_path: str, model_path: str) -> None:
     """
     Main workflow to load, train, evaluate, and save the model.
     """
-    df = load_and_validate_data(data_path)
-    X_train, X_test, y_train, y_test = split_data(df)
-    clf = train_model(X_train, y_train)
+    try:
+        df = load_and_validate_data(data_path)
+        X_train, X_test, y_train, y_test = split_data(df)
+        clf = train_model(X_train, y_train)
 
-    # Evaluate and print accuracy
-    acc = clf.score(X_test, y_test)
-    print(f"Test accuracy: {acc:.3f}")
+        # Evaluate and print accuracy
+        acc = clf.score(X_test, y_test)
+        print(f"Test accuracy: {acc:.3f}")
 
-    save_model(clf, model_path)
+        save_model(clf, model_path)
+    except Exception as exc:
+        print(f"Training pipeline failed: {exc}", file=sys.stderr)
+        raise SystemExit(1) from exc
 
 def save_model(model: Pipeline, model_path: str) -> None:
     """
     Saves the trained model to a file.
     """
-    os.makedirs(os.path.dirname(model_path), exist_ok=True)
-    dump(model, model_path)
+    output_dir = os.path.dirname(model_path) or "."
+    try:
+        os.makedirs(output_dir, exist_ok=True)
+        dump(model, model_path)
+    except OSError as exc:
+        raise OSError(f"Failed to save model to {model_path}") from exc
     print(f"Saved model to {model_path}")
 
 if __name__ == "__main__":
