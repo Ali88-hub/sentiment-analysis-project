@@ -9,10 +9,10 @@ source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### Option 2: Conda
+### Option 2: Conda (Mamba)
 ```python
-conda create -n sentiment-env python=3.11 -y
-conda activate sentiment-env
+mamba create -n sentiment-env python=3.11 -y
+mamba activate sentiment-env
 pip install -r requirements.txt
 ```
 
