@@ -16,7 +16,7 @@ on:
       - ".github/workflows/**"
 
 jobs:
-  run-formatter:
+  run-predict:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -39,6 +39,6 @@ jobs:
       - name: List data directory
         run: ls data/
 
-      - name: Run the formatter script
+      - name: Run the predict script
         run: |
-          python src/formatter.py --input data/raw_sales_data.csv --output data/cleaned_sales_data.csv
+          python src/predict.py --input data/sentiments.csv --output data/cleaned_sales_data.csv
