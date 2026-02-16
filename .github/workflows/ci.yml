@@ -41,4 +41,4 @@ jobs:
 
       - name: Run the predict script
         run: |
-          python src/predict.py --input data/sentiments.csv --output data/predictions.csv
+          python src/predict.py "CI test sentence" > data/predictions.txt
