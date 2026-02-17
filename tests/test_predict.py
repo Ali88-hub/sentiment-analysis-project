@@ -1,4 +1,9 @@
 import numpy as np
+import sys
+from unittest.mock import MagicMock
+
+sys.modules["joblib"] = MagicMock()
+
 import pytest
 
 from src.predict import (
