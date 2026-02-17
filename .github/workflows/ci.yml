@@ -35,6 +35,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Run the train script
+        run: | 
+          python src/train.py --data data/sentiments.csv --out models/sentiment.joblib
+
       - name: Run the predict script
         run: |
           python src/predict.py "good"
