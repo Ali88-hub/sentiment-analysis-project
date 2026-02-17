@@ -2,15 +2,17 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - "src/**"
+      - "tests/**"  # <-- Added
       - "data/**"
       - "requirements.txt"
       - ".github/workflows/**"
   pull_request:
     paths:
       - "src/**"
+      - "tests/**"  # <-- Added
       - "data/**"
       - "requirements.txt"
       - ".github/workflows/**"
@@ -33,17 +35,24 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: List src directory
-        run: ls src/
-
-      - name: List data directory
-        run: ls data/
-
-      - name: Run the train script
-        run: |
-          python src/train.py --data data/sentiments.csv --out models/sentiment.joblib
-      
       - name: Run the predict script
         run: |
-          python src/predict.py "whatever phrase you like"
- 
+          python src/predict.py "good"
+
+  test: # <--- NEW JOB STARTS HERE
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run tests with pytest
+        run: pytest -v
