@@ -1,20 +1,20 @@
-import numpy as np
 import sys
 from unittest.mock import MagicMock
 
-sys.modules["joblib"] = MagicMock()
-
-import pytest
+import numpy as np
 
 from src.predict import (
-    predict_texts,
     format_prediction_lines,
+    predict_texts,
 )
+
+sys.modules["joblib"] = MagicMock()
 
 
 # -----------------------
 # Mock classifiers
 # -----------------------
+
 
 class MockClassifierWithProba:
     def predict(self, texts):
@@ -22,10 +22,7 @@ class MockClassifierWithProba:
 
     def predict_proba(self, texts):
         # probability of positive class
-        return np.array([
-            [0.2, 0.8] if "good" in t else [0.9, 0.1]
-            for t in texts
-        ])
+        return np.array([[0.2, 0.8] if "good" in t else [0.9, 0.1] for t in texts])
 
 
 class MockClassifierNoProba:
@@ -36,6 +33,7 @@ class MockClassifierNoProba:
 # -----------------------
 # Tests for predict_texts
 # -----------------------
+
 
 def test_predict_texts_with_predict_proba():
     clf = MockClassifierWithProba()
@@ -60,6 +58,7 @@ def test_predict_texts_without_predict_proba():
 # -----------------------
 # Tests for format_prediction_lines
 # -----------------------
+
 
 def test_format_prediction_lines_with_probs():
     texts = ["hello", "world"]
@@ -87,6 +86,7 @@ def test_format_prediction_lines_without_probs():
 # -----------------------
 # Edge cases
 # -----------------------
+
 
 def test_empty_input():
     clf = MockClassifierNoProba()
