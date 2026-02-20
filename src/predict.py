@@ -1,3 +1,5 @@
+"""Module for making predictions based on input texts."""
+
 import argparse
 from typing import Any
 
@@ -29,19 +31,18 @@ def format_prediction_lines(
 ) -> list[str]:
     """Return tab-separated CLI output lines for each input text."""
     lines: list[str] = []
-    for text, pred, prob in zip(texts, preds, probs):
+    for text, pred, prob in zip(texts, preds, probs, strict=True):
         if prob is None:
             lines.append(f"{pred}\t{text}")
-        else:
-            lines.append(f"{pred}\t{prob:.3f}\t{text}")
     return lines
 
 
 def main(model_path: str, input_texts: list[str]) -> None:
+    """Main workflow to load the model, predict, and print results."""
     classifier = load_model(model_path)
     preds, probs = predict_texts(classifier, input_texts)
     for line in format_prediction_lines(input_texts, preds, probs):
-        print(line) # noqa
+        print(line)  # noqa
 
 
 if __name__ == "__main__":

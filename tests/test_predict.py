@@ -2,7 +2,6 @@ import sys
 from unittest.mock import MagicMock
 
 import numpy as np
-
 from src.predict import (
     format_prediction_lines,
     predict_texts,

@@ -1,6 +1,6 @@
-scikit-learn==1.7.1
-pandas==2.2.2
 joblib==1.5.2
-pytest==9.0.2
 numpy
+pandas==2.2.2
+pytest==9.0.2
 ruff==0.15.1
+scikit-learn==1.7.1

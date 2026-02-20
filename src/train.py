@@ -1,3 +1,5 @@
+"""Module for training the prediction model."""
+
 import argparse
 import os
 
@@ -10,9 +12,7 @@ from sklearn.pipeline import Pipeline, make_pipeline
 
 
 def load_and_validate_data(data_path: str) -> pd.DataFrame:
-    """
-    Loads data from a CSV and ensures it has the required columns.
-    """
+    """Loads data from a CSV and ensures it has the required columns."""
     df = pd.read_csv(data_path)
     if not {"text", "label"}.issubset(df.columns):
         raise ValueError("CSV must contain 'text' and 'label' columns")
@@ -22,9 +22,7 @@ def load_and_validate_data(data_path: str) -> pd.DataFrame:
 def split_data(
     df: pd.DataFrame,
 ) -> tuple[pd.Series, pd.Series, pd.Series, pd.Series]:
-    """
-    Splits the DataFrame into training and testing sets.
-    """
+    """Splits the DataFrame into training and testing sets."""
     try:
         # Stratified split is preferred
         X_train, X_test, y_train, y_test = train_test_split(
@@ -43,9 +41,7 @@ def split_data(
 
 
 def train_model(X_train: pd.Series, y_train: pd.Series) -> Pipeline:
-    """
-    Builds and trains a classification pipeline.
-    """
+    """Builds and trains a classification pipeline."""
     clf_pipeline = make_pipeline(
         TfidfVectorizer(min_df=1, ngram_range=(1, 2)),
         LogisticRegression(max_iter=1000),
@@ -55,9 +51,7 @@ def train_model(X_train: pd.Series, y_train: pd.Series) -> Pipeline:
 
 
 def main(data_path: str, model_path: str) -> None:
-    """
-    Main workflow to load, train, evaluate, and save the model.
-    """
+    """Main workflow to load, train, evaluate, and save the model."""
     df = load_and_validate_data(data_path)
     X_train, X_test, y_train, y_test = split_data(df)
     clf = train_model(X_train, y_train)
@@ -70,9 +64,7 @@ def main(data_path: str, model_path: str) -> None:
 
 
 def save_model(model: Pipeline, model_path: str) -> None:
-    """
-    Saves the trained model to a file.
-    """
+    """Saves the trained model to a file."""
     os.makedirs(os.path.dirname(model_path), exist_ok=True)
     dump(model, model_path)
     print(f"Saved model to {model_path}")  # noqa

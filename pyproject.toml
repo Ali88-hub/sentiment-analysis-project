@@ -1,8 +1,22 @@
 [tool.ruff]
 line-length = 88
+indent-width = 4
+target-version = "py311"
+src = ["src", "tests"]
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "T20"]
+select = ["E", "F", "I", "B", "UP", "SIM", "C4", "T20", "ERA", "D", "ANN", "RET"]
+ignore = ["D417", "ANN401"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"src/predict.py" = ["T201"]
+"src/train.py" = ["T201"]
+"messy_data_processor.py" = ["T201"]
+"tests/**/*.py" = ["D", "ANN"]
+"**/__init__.py" = ["D104"]
 
 [tool.ruff.format]
 quote-style = "double"
