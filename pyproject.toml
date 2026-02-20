@@ -5,18 +5,17 @@ target-version = "py311"
 src = ["src", "tests"]
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "B", "UP", "SIM", "C4", "T20", "ERA", "D", "ANN", "RET"]
-ignore = ["D417", "ANN401"]
+# Select only essential checks
+select = ["E", "F", "I", "B"]
+ignore = ["D417"]
 
+# Consider removing per-file ignores if not needed
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
-"src/predict.py" = ["T201"]
-"src/train.py" = ["T201"]
-"messy_data_processor.py" = ["T201"]
+# Keep only essential ignores
 "tests/**/*.py" = ["D", "ANN"]
-"**/__init__.py" = ["D104"]
 
 [tool.ruff.format]
 quote-style = "double"
