@@ -4,19 +4,21 @@ FROM python:3.11-slim
 # Layer 2: Set the working directory inside the container
 WORKDIR /app
 
-# Layers 3&4: Copy the requirements file and install dependencies
+# Layers 3 & 4: Copy the requirements file and install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Layers 5&6: Copy local project files into the container
-# The first path is the source on your local machine.
-# The second path is the destination inside the container's /app directory.
-COPY src/predict.py src/predict.py
+# Layers 5 & 6: Copy local project files into the container
+COPY src/ src/
 COPY data/ data/
-COPY models/ models/
 
-# Layver 7: Fixed command (never changes)
-ENTRYPOINT [ "python", "src/predict.py" ]
+# Layer 7: Train the model during build (creates models/)
+RUN python src/train.py \
+    --data data/sentiments.csv \
+    --out models/sentiment.joblib
 
-# Layer 8: Default argument
+# Layer 8: Fixed command (never changes)
+ENTRYPOINT ["python", "src/predict.py"]
+
+# Layer 9: Default arguments
 CMD ["I absolutely loved it", "That was awful"]
