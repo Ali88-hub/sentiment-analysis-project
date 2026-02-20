@@ -38,6 +38,7 @@ jobs:
         run: |
           ruff check .
           ruff format . --check
+          ruff format . --check --fixable
 
   test:
     runs-on: ubuntu-latest
