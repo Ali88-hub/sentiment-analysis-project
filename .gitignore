@@ -16,10 +16,5 @@ notebooks/*.zip
 *.zip
 data/
 datasets/
-
-# Modelle
-model/
-models/
-
 # Notebooks-Artefakte
 notebooks/
