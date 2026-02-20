@@ -23,5 +23,3 @@ models/
 
 # Notebooks-Artefakte
 notebooks/
-Dockerfile
-.dockerignore
