@@ -16,7 +16,7 @@ on:
       - "data/**"
       - "requirements.txt"
       - ".github/workflows/**"
-
+  workflow_dispatch:  # This enables manual triggering of the workflow
 jobs:
   lint-and-format:
     runs-on: ubuntu-latest
