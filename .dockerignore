@@ -1,19 +1,23 @@
 __pycache__/
 .pytest_cache/
+.ruff_cache/
+
 .git/
 .gitignore
+.github/
+
 venv/
 .env
-#models/
-#data/
-.ruff_cache/
-.github\workflows
-.vscode
-src/train.py
+sentiment-analysis-env/
+
+.vscode/
+notebooks/
+.ssh/
+
 tests/
 .pre-commit-config.yaml
-.ssh
-notebooks
-sentiment-analysis-env
-pyproject.toml
-README.md
+
+# Do NOT ignore these:
+# src/train.py
+# data/
+# models/   (models are created during build)
