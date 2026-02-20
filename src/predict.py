@@ -33,7 +33,12 @@ def format_prediction_lines(
     lines: list[str] = []
     for text, pred, prob in zip(texts, preds, probs, strict=True):
         if prob is None:
+            # Append the line without the probability
             lines.append(f"{pred}\t{text}")
+        else:
+            # Format the probability to 3 decimal places
+            formatted_line = f"{pred}\t{round(prob, 3)}\t{text}"
+            lines.append(formatted_line)
     return lines
 
 
