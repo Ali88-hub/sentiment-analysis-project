@@ -36,9 +36,13 @@ jobs:
 
       - name: Run linter and formatter checks
         run: |
-          ruff check .
-          ruff format . --check
-          ruff format . --check --fixable
+          ruff check .  # Check for issues
+          ruff format . --check --fixable  # Check what can be fixed
+
+      - name: Auto-fix formatting issues
+        run: |
+          ruff format .  # Apply fixes automatically
+
 
   test:
     runs-on: ubuntu-latest
